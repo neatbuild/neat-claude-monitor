@@ -1,0 +1,44 @@
+<div id="req-{{ req.uuid }}" class="bg-gray-800/50 border border-amber-600/40 rounded-lg p-4 mb-3">
+  <div class="flex justify-between items-center mb-3">
+    <div class="flex items-center gap-2">
+      <i data-lucide="shield-alert" class="w-4 h-4 text-amber-400"></i>
+      <span class="text-xs font-semibold px-2 py-0.5 rounded-md bg-amber-900/50 text-amber-300 border border-amber-700/30">PENDING</span>
+    </div>
+    <span class="text-xs text-gray-500">{{ req.created_at.strftime('%I:%M:%S %p') }}</span>
+  </div>
+  <div class="text-sm text-gray-300 space-y-1.5">
+    <div class="flex items-center gap-2">
+      <i data-lucide="folder" class="w-3.5 h-3.5 text-gray-500 flex-shrink-0"></i>
+      <span class="text-gray-400 truncate">{{ req.cwd }}</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <i data-lucide="terminal" class="w-3.5 h-3.5 text-gray-500 flex-shrink-0"></i>
+      <span class="font-medium text-white">{{ req.tool_name }}</span>
+      <span class="text-gray-500">-</span>
+      <span class="font-mono text-xs text-gray-400 truncate">{{ req.tool_display }}</span>
+    </div>
+  </div>
+  <div class="mt-3 space-y-1.5">
+    {% with item=req %}{% include "fragments/_tool_detail.html" %}{% endwith %}
+  </div>
+  <div class="flex gap-2 mt-4">
+    <button
+      hx-post="/respond/{{ req.uuid }}/allow"
+      hx-target="#req-{{ req.uuid }}"
+      hx-swap="outerHTML"
+      class="flex items-center gap-1.5 px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md text-sm font-medium transition-colors"
+    >
+      <i data-lucide="check" class="w-3.5 h-3.5"></i>
+      Approve
+    </button>
+    <button
+      hx-post="/respond/{{ req.uuid }}/deny"
+      hx-target="#req-{{ req.uuid }}"
+      hx-swap="outerHTML"
+      class="flex items-center gap-1.5 px-4 py-1.5 bg-red-600/80 hover:bg-red-500 text-white rounded-md text-sm font-medium transition-colors"
+    >
+      <i data-lucide="x" class="w-3.5 h-3.5"></i>
+      Deny
+    </button>
+  </div>
+</div>

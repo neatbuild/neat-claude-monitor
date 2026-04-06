@@ -1,0 +1,68 @@
+{% if item.tool_name == "Bash" %}
+<div>
+  <span class="text-[10px] uppercase tracking-wider text-gray-500">Command</span>
+  <pre class="mt-0.5 text-xs text-gray-300 font-mono bg-gray-900/60 rounded px-2 py-1.5 overflow-x-auto whitespace-pre-wrap break-all max-h-40">{{ item.tool_input.get('command', '') }}</pre>
+</div>
+{% elif item.tool_name == "Edit" %}
+<div>
+  <span class="text-[10px] uppercase tracking-wider text-gray-500">File</span>
+  <pre class="mt-0.5 text-xs text-gray-300 font-mono bg-gray-900/60 rounded px-2 py-1.5 whitespace-pre-wrap break-all">{{ item.tool_input.get('file_path', '') }}</pre>
+</div>
+{% if item.tool_input.get('old_string') %}
+<div>
+  <span class="text-[10px] uppercase tracking-wider text-red-400/70">Removed</span>
+  <pre class="mt-0.5 text-xs text-red-300/80 font-mono bg-red-950/30 rounded px-2 py-1.5 overflow-x-auto whitespace-pre-wrap break-all max-h-40 border border-red-900/20">{{ item.tool_input.get('old_string', '') }}</pre>
+</div>
+{% endif %}
+{% if item.tool_input.get('new_string') %}
+<div>
+  <span class="text-[10px] uppercase tracking-wider text-emerald-400/70">Added</span>
+  <pre class="mt-0.5 text-xs text-emerald-300/80 font-mono bg-emerald-950/30 rounded px-2 py-1.5 overflow-x-auto whitespace-pre-wrap break-all max-h-40 border border-emerald-900/20">{{ item.tool_input.get('new_string', '') }}</pre>
+</div>
+{% endif %}
+{% elif item.tool_name == "Write" %}
+<div>
+  <span class="text-[10px] uppercase tracking-wider text-gray-500">File</span>
+  <pre class="mt-0.5 text-xs text-gray-300 font-mono bg-gray-900/60 rounded px-2 py-1.5 whitespace-pre-wrap break-all">{{ item.tool_input.get('file_path', '') }}</pre>
+</div>
+{% if item.tool_input.get('content') %}
+<div>
+  <span class="text-[10px] uppercase tracking-wider text-gray-500">Content</span>
+  <pre class="mt-0.5 text-xs text-gray-300 font-mono bg-gray-900/60 rounded px-2 py-1.5 overflow-x-auto whitespace-pre-wrap break-all max-h-40">{{ item.tool_input.get('content', '')[:500] }}{% if item.tool_input.get('content', '')|length > 500 %}…{% endif %}</pre>
+</div>
+{% endif %}
+{% elif item.tool_name == "Read" %}
+<div>
+  <span class="text-[10px] uppercase tracking-wider text-gray-500">File</span>
+  <pre class="mt-0.5 text-xs text-gray-300 font-mono bg-gray-900/60 rounded px-2 py-1.5 whitespace-pre-wrap break-all">{{ item.tool_input.get('file_path', '') }}</pre>
+</div>
+{% elif item.tool_name in ("Grep", "Glob") %}
+<div>
+  <span class="text-[10px] uppercase tracking-wider text-gray-500">Pattern</span>
+  <p class="text-xs text-gray-300 font-mono">{{ item.tool_input.get('pattern', '') }}</p>
+</div>
+{% if item.tool_input.get('path') %}
+<div>
+  <span class="text-[10px] uppercase tracking-wider text-gray-500">Path</span>
+  <pre class="mt-0.5 text-xs text-gray-300 font-mono bg-gray-900/60 rounded px-2 py-1.5 whitespace-pre-wrap break-all">{{ item.tool_input.get('path', '') }}</pre>
+</div>
+{% endif %}
+{% elif item.tool_name == "Agent" %}
+<div>
+  <span class="text-[10px] uppercase tracking-wider text-gray-500">Description</span>
+  <p class="text-xs text-gray-300">{{ item.tool_input.get('description', '') }}</p>
+</div>
+{% if item.tool_input.get('prompt') %}
+<div>
+  <span class="text-[10px] uppercase tracking-wider text-gray-500">Prompt</span>
+  <pre class="mt-0.5 text-xs text-gray-300 font-mono bg-gray-900/60 rounded px-2 py-1.5 overflow-x-auto whitespace-pre-wrap break-all max-h-40">{{ item.tool_input.get('prompt', '')[:500] }}{% if item.tool_input.get('prompt', '')|length > 500 %}…{% endif %}</pre>
+</div>
+{% endif %}
+{% else %}
+{% for key, value in item.tool_input.items() %}
+<div>
+  <span class="text-[10px] uppercase tracking-wider text-gray-500">{{ key }}</span>
+  <pre class="mt-0.5 text-xs text-gray-300 font-mono bg-gray-900/60 rounded px-2 py-1.5 overflow-x-auto whitespace-pre-wrap break-all max-h-40">{{ value if value is string else value | tojson(indent=2) }}</pre>
+</div>
+{% endfor %}
+{% endif %}

@@ -1,0 +1,29 @@
+<details id="history-{{ entry.uuid }}" class="border-b border-gray-800/60 hover:bg-gray-800/20 transition-colors group">
+  <summary class="flex items-center gap-3 py-2 px-4 text-sm cursor-pointer list-none">
+    {% if entry.decision == "allow" %}
+    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
+    <span class="text-xs font-semibold px-1.5 py-0.5 rounded bg-emerald-900/40 text-emerald-400 w-12 text-center">OK</span>
+    {% elif entry.decision == "deny" %}
+    <i data-lucide="x-circle" class="w-4 h-4 text-red-400 flex-shrink-0"></i>
+    <span class="text-xs font-semibold px-1.5 py-0.5 rounded bg-red-900/40 text-red-400 w-12 text-center">DENY</span>
+    {% elif entry.decision == "auto" %}
+    <i data-lucide="zap" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
+    <span class="text-xs font-semibold px-1.5 py-0.5 rounded bg-emerald-900/40 text-emerald-400 w-12 text-center">AUTO</span>
+    {% endif %}
+    <span class="text-gray-300 font-medium whitespace-nowrap">{{ entry.tool_name }}</span>
+    {% if entry.tool_name in ("Read", "Grep", "Glob") %}
+    <span class="text-[9px] font-semibold px-1 py-0.5 rounded bg-emerald-900/30 text-emerald-400/60 uppercase tracking-wider leading-none">safe</span>
+    {% elif entry.tool_name in ("Edit", "Write") %}
+    <span class="text-[9px] font-semibold px-1 py-0.5 rounded bg-amber-900/30 text-amber-400/80 uppercase tracking-wider leading-none">mutating</span>
+    {% else %}
+    <span class="text-[9px] font-semibold px-1 py-0.5 rounded bg-red-900/30 text-red-400/80 uppercase tracking-wider leading-none">dangerous</span>
+    {% endif %}
+    <span class="flex-1"></span>
+    <span class="px-1.5 py-0.5 rounded-full bg-gray-700 text-gray-400 text-[10px] font-medium leading-none whitespace-nowrap" title="Output tokens for this API turn">{{ format_tokens(entry.output_tokens) if entry.output_tokens else '0' }} tokens</span>
+    <span class="text-gray-600 text-xs whitespace-nowrap">{{ entry.decided_at.strftime('%I:%M:%S %p') }}</span>
+    <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-gray-600 flex-shrink-0 transition-transform group-open:rotate-180"></i>
+  </summary>
+  <div class="px-4 pb-3 pt-1 space-y-1.5">
+    {% with item=entry %}{% include "fragments/_tool_detail.html" %}{% endwith %}
+  </div>
+</details>
